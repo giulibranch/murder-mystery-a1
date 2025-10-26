@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Easy Mystery Game</title>
+  <title>Easy Mystery Game - Past Simple</title>
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+  
+  <style>
+    /* Asegura que el modal siempre esté encima de todo */
+    #question-modal {
+        z-index: 1000; 
+    }
+    /* Estilo para que las palabras desordenadas sean más fáciles de tocar en móvil */
+    #modal-word-bank li {
+        padding: 0.75rem 1rem; /* Aumenta el área de toque */
+        font-size: 1rem;
+    }
+  </style>
 </head>
 <body class="bg-gray-100 min-h-screen p-6">
   <div class="max-w-4xl mx-auto">
@@ -23,9 +36,10 @@
       <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="suspect-grid"></div>
     </section>
 
-    <div id="question-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div id="question-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden">
       <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
         <h3 class="text-xl font-bold mb-4" id="modal-title">Ask a Question</h3>
+        <p class="text-sm text-gray-600 mb-2">Drag and drop the words to form the question (Past Simple):</p>
         <ul id="modal-word-bank" class="flex gap-2 flex-wrap p-4 bg-gray-100 rounded mb-4 min-h-[60px]"></ul>
         <button onclick="checkModalQuestion()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Check</button>
         <p id="modal-result" class="mt-2 font-bold"></p>
@@ -149,6 +163,8 @@
 
     let currentSuspect = null;
     let currentQuestionIndex = 0;
+    // VARIABLE CLAVE: Almacena la instancia de Sortable para poder destruirla y regenerarla.
+    let sortableInstance = null; 
 
     const suspectGrid = document.getElementById('suspect-grid');
     suspects.forEach((s) => {
@@ -168,20 +184,31 @@
     }
 
     function loadModalQuestion() {
-      document.getElementById('modal-title').textContent = `Ask ${currentSuspect.name}`;
+      // Título con el número de pregunta para más claridad
+      document.getElementById('modal-title').textContent = `Ask ${currentSuspect.name}: Question ${currentQuestionIndex + 1}`;
       const bank = document.getElementById('modal-word-bank');
       bank.innerHTML = '';
       document.getElementById('next-question-btn').classList.add('hidden');
 
+      // CORRECCIÓN CLAVE: Destruir la instancia anterior de Sortable
+      if (sortableInstance) {
+          sortableInstance.destroy();
+          sortableInstance = null;
+      }
+      
       const selectedWords = allQuestions[currentQuestionIndex].split(' ');
       shuffle(selectedWords);
+      
       selectedWords.forEach(word => {
         const li = document.createElement('li');
         li.textContent = word;
-        li.className = 'px-3 py-2 bg-blue-100 rounded cursor-move';
+        // La clase `cursor-move` asegura que se vea como algo arrastrable.
+        li.className = 'px-3 py-2 bg-blue-100 rounded cursor-move'; 
         bank.appendChild(li);
       });
-      Sortable.create(bank, { animation: 150 });
+      
+      // Crear y guardar la nueva instancia de Sortable
+      sortableInstance = Sortable.create(bank, { animation: 150 });
     }
 
     function checkModalQuestion() {
@@ -191,10 +218,10 @@
       const result = document.getElementById('modal-result');
       if (userQuestion === expected) {
         const answer = currentSuspect.responses[`q${currentQuestionIndex + 1}`];
-        result.textContent = `${currentSuspect.name} said: \"${answer}\"`;
+        result.textContent = `✅ Correct! ${currentSuspect.name} said: \"${answer}\"`;
         document.getElementById('next-question-btn').classList.remove('hidden');
       } else {
-        result.textContent = 'Try again.';
+        result.textContent = '❌ Try again.';
       }
     }
 
@@ -210,6 +237,11 @@
 
     function closeModal() {
       document.getElementById('question-modal').classList.add('hidden');
+      // Destruir la instancia de Sortable al cerrar el modal también es una buena práctica
+      if (sortableInstance) {
+          sortableInstance.destroy();
+          sortableInstance = null;
+      }
     }
 
     function checkTimeline() {
