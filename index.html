@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Easy Mystery Game - Past Simple</title>
+  <title>Mystery Game - Past Simple</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
@@ -88,7 +88,7 @@
         responses: {
           q1: 'At 7:40, I was cooking dinner in the kitchen.',
           q2: 'At 7:45, I saw someone walking fast to the study room.',
-          q3: 'At 7:47, the lights went off. I heard a scream.',
+          q3: 'At 7:47, the lights went off, and I heard a scream.',
           q4: 'At 7:50, I stayed in the kitchen.'
         }
       },
@@ -117,7 +117,7 @@
         job: 'Driver',
         responses: {
           q1: 'At 7:40, I was cleaning the car in the garage.',
-          q2: 'At 7:45, I didn't see anyone, but I heard a loudb noise inside.',
+          q2: 'At 7:45, I didn't see anyone, but I heard a loud noise inside.',
           q3: 'At 7:47, the lighs went off.',
           q4: 'At 7:50, I stayed outside.'
         }
@@ -248,17 +248,16 @@
       const expected = [
         'Clara turned off the lights.',
         'Clara went into the study.',
-        'Clara hit Mr. Blackwell.',
-        'Clara ran to her room.',
-        'Alice found the body.'
+        'Clara killed Mr. Blackwell.',
+        'Clara went to her room.',
+        'Eva found the body.'
       ];
 
       const userAnswers = [
         document.getElementById('time1').value.trim(),
         document.getElementById('time2').value.trim(),
         document.getElementById('time3').value.trim(),
-        document.getElementById('time4').value.trim(),
-        document.getElementById('time5').value.trim()
+        document.getElementById('time4').value.trim()
       ];
 
       const result = document.getElementById('timeline-result');
@@ -282,4 +281,5 @@
   </script>
 </body>
 </html>
+
 
