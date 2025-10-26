@@ -1,288 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Murder Mystery Game</title>
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
-  
-  <style>
-    /* Asegura que el modal siempre esté encima de todo */
-    #question-modal {
-        z-index: 1000; 
-    }
-    /* Estilo para que las palabras desordenadas sean más fáciles de tocar en móvil */
-    #modal-word-bank li {
-        padding: 0.75rem 1rem; /* Aumenta el área de toque */
-        font-size: 1rem;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Murder Mystery Game</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 </head>
 <body class="bg-gray-100 min-h-screen p-6">
-  <div class="max-w-4xl mx-auto">
-    <h1 class="text-3xl font-bold text-center mb-4">🔍 Mystery Game</h1>
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold text-center mb-4">🔍 Mystery Game</h1>
 
-    <section class="mb-8 bg-white p-6 rounded shadow">
-      <h2 class="text-2xl font-semibold mb-2">The Story</h2>
-      <p class="text-gray-700">
-        Last night at 8:00 PM, Mr. Blackwell was found dead in the study room of the small hotel. Seven people were in the hotel. Ask questions, and guess who killed Mr. Blackwell.
-      </p>
-    </section>
+    <section class="mb-8 bg-white p-6 rounded shadow">
+      <h2 class="text-2xl font-semibold mb-2">The Story</h2>
+      <p class="text-gray-700">
+        Last night at **7:50 PM**, Mr. Blackwell was dead in the study room. Seven people were in the house. Ask questions, find clues, and guess who killed Mr. Blackwell.
+      </p>
+    </section>
 
-    <section class="mb-8">
-      <h2 class="text-2xl font-semibold mb-4">Suspects</h2>
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="suspect-grid"></div>
-    </section>
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">Suspects</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="suspect-grid"></div>
+    </section>
 
-    <div id="question-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden">
-      <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-        <h3 class="text-xl font-bold mb-4" id="modal-title">Ask a Question</h3>
-        <p class="text-sm text-gray-600 mb-2">Drag and drop the words to form the question (Past Simple):</p>
-        <ul id="modal-word-bank" class="flex gap-2 flex-wrap p-4 bg-gray-100 rounded mb-4 min-h-[60px]"></ul>
-        <button onclick="checkModalQuestion()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Check</button>
-        <p id="modal-result" class="mt-2 font-bold"></p>
-        <button id="next-question-btn" onclick="nextModalQuestion()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded hidden">Next</button>
-        <button onclick="closeModal()" class="mt-4 text-sm text-red-500 underline">Close</button>
-      </div>
-    </div>
+    <div id="question-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+      <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+        <h3 class="text-xl font-bold mb-4" id="modal-title">Ask a Question</h3>
+        <ul id="modal-word-bank" class="flex gap-2 flex-wrap p-4 bg-gray-100 rounded mb-4 min-h-[60px]"></ul>
+        <button onclick="checkModalQuestion()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Check</button>
+        <p id="modal-result" class="mt-2 font-bold"></p>
+        <button id="next-question-btn" onclick="nextModalQuestion()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded hidden">Next</button>
+        <button onclick="closeModal()" class="mt-4 text-sm text-red-500 underline">Close</button>
+      </div>
+    </div>
 
-    <section class="mb-8">
-      <h2 class="text-2xl font-semibold mb-4">Killer's Timeline</h2>
-      <p class="mb-2 text-gray-600">Write what happened between 7:40 and 8:00:</p>
-      <form id="timeline-form" class="bg-white rounded-lg shadow p-4 space-y-4">
-        <div><label class="block font-semibold">7:40 PM</label><input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="What happened?" id="time1"></div>
-        <div><label class="block font-semibold">7:45 PM</label><input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="What happened?" id="time2"></div>
-        <div><label class="block font-semibold">7:47 PM</label><input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="What happened?" id="time3"></div>
-        <div><label class="block font-semibold">7:50 PM</label><input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="What happened?" id="time4"></div>
-        <div><label class="block font-semibold">8:00 PM</label><input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="What happened?" id="time5"></div>
-        <button type="button" onclick="checkTimeline()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Check</button>
-        <p id="timeline-result" class="mt-2 font-bold"></p>
-      </form>
-    </section>
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">Killer's Timeline</h2>
+      <p class="mb-2 text-gray-600">Write what happened between 7:40 and 7:50:</p>
+      <form id="timeline-form" class="bg-white rounded-lg shadow p-4 space-y-4">
+        <div><label class="block font-semibold">7:40 PM</label><input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="What happened?" id="time1"></div>
+        <div><label class="block font-semibold">7:45 PM</label><input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="What happened?" id="time2"></div>
+        <div><label class="block font-semibold">7:47 PM</label><input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="What happened?" id="time3"></div>
+        <div><label class="block font-semibold">7:50 PM</label><input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="What happened?" id="time4"></div>
+        <button type="button" onclick="checkTimeline()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Check</button>
+        <p id="timeline-result" class="mt-2 font-bold"></p>
+      </form>
+    </section>
 
-    <section>
-      <h2 class="text-2xl font-semibold mb-4">Who is the killer?</h2>
-      <p class="text-gray-600 mb-2">Choose the killer:</p>
-      <select id="killer-guess" class="w-full max-w-xs p-2 border border-gray-300 rounded">
-        <option value="">-- Choose --</option>
-        <option>Alice</option>
-        <option>Bob</option>
-        <option>Clara</option>
-        <option>David</option>
-        <option>Eva</option>
-        <option>Frank</option>
-        <option>Gina</option>
-      </select>
-      <button onclick="checkKillerGuess()" class="mt-4 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Submit</button>
-      <p id="killer-result" class="mt-2 font-bold"></p>
-    </section>
-  </div>
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">Who Did It?</h2>
+      <p class="text-gray-600 mb-2">Choose the killer:</p>
+      <select id="killer-guess" class="w-full max-w-xs p-2 border border-gray-300 rounded">
+        <option value="">-- Choose --</option>
+        <option>Alice</option>
+        <option>Bob</option>
+        <option>Clara</option>
+        <option>David</option>
+        <option>Eva</option>
+        <option>Frank</option>
+        <option>Gina</option>
+      </select>
+      <button onclick="checkKillerGuess()" class="mt-4 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Submit</button>
+      <p id="killer-result" class="mt-2 font-bold"></p>
+    </section>
+  </div>
 
-  <script>
-    const suspects = [
-      {
-        name: 'Alice',
-        job: 'Cook',
-        responses: {
-          q1: 'At 7:40, I was cooking dinner in the kitchen.',
-          q2: 'At 7:45, I saw someone walking fast to the study room.',
-          q3: 'At 7:47, the lights went off, and I heard a scream.',
-          q4: 'At 7:50, I stayed in the kitchen.'
-        }
-      },
-      {
-        name: 'Bob',
-        job: 'Gardener',
-        responses: {
-          q1: 'At 7:40, I was in the garden.',
-          q2: 'At 7:45, I didn't see anyone, but I heard a loud noise.',
-          q3: 'At 7:47, I saw the lights go off, and someone screamed.',
-          q4: 'At 7:50, I went inside the house.'
-        }
-      },
-      {
-        name: 'Clara',
-        job: 'Teacher',
-        responses: {
-          q1: 'At 7:40, I was in the living room.',
-          q2: 'At 7:45, I went outside to talk to Bob.',
-          q3: 'At 7:47, the lights went off. I was scared.',
-          q4: 'At 7:50, I went to my room.'
-        }
-      },
-      {
-        name: 'David',
-        job: 'Driver',
-        responses: {
-          q1: 'At 7:40, I was cleaning the car in the garage.',
-          q2: 'At 7:45, I didn't see anyone, but I heard a loud noise inside.',
-          q3: 'At 7:47, the lighs went off.',
-          q4: 'At 7:50, I stayed outside.'
-        }
-      },
-      {
-        name: 'Eva',
-        job: 'Doctor',
-        responses: {
-          q1: 'At 7:40, I was reading a book in the hall.',
-          q2: 'At 7:45, I saw Alice cooking in the kitchen.',
-          q3: 'At 7:47, the lights went off, and I heard a scream in the study room.',
-          q4: 'At 7:50, I went to the study room to check.'
-        }
-      },
-      {
-        name: 'Frank',
-        job: 'Musician',
-        responses: {
-          q1: 'At 7:40, I was playing the guitar in the music room.',
-          q2: 'At 7:45, I saw Bob alone in the garden.',
-          q3: 'At 7:47, the lights went off.',
-          q4: 'At 7:50, I stayed in the music room.'
-        }
-      },
-      {
-        name: 'Gina',
-        job: 'Librarian',
-        responses: {
-          q1: 'At 7:40, I was in the library.',
-          q2: 'At 7:45, I saw Clara near the study room.',
-          q3: 'At 7:47, I heard a scream after the lights went off.',
-          q4: 'At 7:50, I stayed in the library.'
-        }
-      }
-    ];
+  <script>
+    const suspects = [
+      {
+        name: 'Alice',
+        job: 'Cook',
+        responses: {
+          q1: 'At 7:40, I was cooking dinner in the kitchen.',
+          q2: 'At 7:45, I saw someone walking fast to the study room.',
+          q3: 'At 7:47, the lights went off, and I heard a scream.',
+          q4: 'At 7:50, I stayed in the kitchen.'
+        }
+      },
+      {
+        name: 'Bob',
+        job: 'Gardener',
+        responses: {
+          q1: 'I was in the garden.',
+          q2: 'At 7:45, I didn\'t see anyone, but I heard a loud noise.',
+          q3: 'At 7:47, I saw the lights go off, and someone screamed.',
+          q4: 'At 7:50, I went inside the house.'
+        }
+      },
+      {
+        name: 'Clara',
+        job: 'Teacher',
+        responses: {
+          q1: 'At 7:40, I was in the living room.',
+          q2: 'At 7:45, I went outside to talk to Bob.',
+          q3: 'At 7:47, the lights went off. I was scared.',
+          q4: 'At 7:50, I went to my room.'
+        }
+      },
+      {
+        name: 'David',
+        job: 'Driver',
+        responses: {
+          q1: 'At 7:40, I was cleaning the car in the garage.',
+          q2: 'At 7:45, I didn\'t see anyone, but I heard a loud noise inside.',
+          q3: 'At 7:47, the lighs went off.',
+          q4: 'At 7:50, I stayed outside.'
+        }
+      },
+      {
+        name: 'Eva',
+        job: 'Doctor',
+        responses: {
+          q1: 'At 7:40, I was reading a book in the hall.',
+          q2: 'At 7:45, I saw Alice cooking in the kitchen.',
+          q3: 'At 7:47, the lights went off, and I heard a scream in the study room.',
+          q4: 'At 7:50, I went to the study room, and I found Mr. Blackwell\'s body.'
+        }
+      },
+      {
+        name: 'Frank',
+        job: 'Musician',
+        responses: {
+          q1: 'At 7:40, I was playing the guitar in the music room.',
+          q2: 'At 7:45, I saw Bob alone in the garden.',
+          q3: 'At 7:47, the lights went off.',
+          q4: 'At 7:50, I stayed in the music room.'
+        }
+      },
+      {
+        name: 'Gina',
+        job: 'Librarian',
+        responses: {
+          q1: 'At 7:40, I was in the library.',
+          q2: 'At 7:45, I saw Clara near the study room.',
+          q3: 'At 7:47, I heard a scream after the lights went off.',
+          q4: 'At 7:50, I stayed in the library.'
+        }
+      }
+    ];
 
-    const allQuestions = [
-      'Where were you at 7:40?',
-      'What did you see at 7:45?',
-      'What happened at 7:47?',
-      'Where were you at 7:50?'
-    ];
+    const allQuestions = [
+      'Where were you at 7:40?',
+      'What did you see at 7:45?',
+      'What happened at 7:47?',
+      'Where were you at 7:50?'
+    ];
 
-    let currentSuspect = null;
-    let currentQuestionIndex = 0;
-    // VARIABLE CLAVE: Almacena la instancia de Sortable para poder destruirla y regenerarla.
-    let sortableInstance = null; 
+    let currentSuspect = null;
+    let currentQuestionIndex = 0;
 
-    const suspectGrid = document.getElementById('suspect-grid');
-    suspects.forEach((s) => {
-      const div = document.createElement('div');
-      div.className = 'bg-white p-4 rounded shadow text-center cursor-pointer hover:bg-blue-100';
-      div.onclick = () => openModal(s);
-      div.innerHTML = `<h3 class='font-bold text-lg'>${s.name}</h3><p class='text-sm text-gray-600'>${s.job}</p>`;
-      suspectGrid.appendChild(div);
-    });
+    const suspectGrid = document.getElementById('suspect-grid');
+    suspects.forEach((s) => {
+      const div = document.createElement('div');
+      div.className = 'bg-white p-4 rounded shadow text-center cursor-pointer hover:bg-blue-100';
+      div.onclick = () => openModal(s);
+      div.innerHTML = `<h3 class='font-bold text-lg'>${s.name}</h3><p class='text-sm text-gray-600'>${s.job}</p>`;
+      suspectGrid.appendChild(div);
+    });
 
-    function openModal(suspect) {
-      currentSuspect = suspect;
-      currentQuestionIndex = 0;
-      document.getElementById('modal-result').textContent = '';
-      loadModalQuestion();
-      document.getElementById('question-modal').classList.remove('hidden');
-    }
+    function openModal(suspect) {
+      currentSuspect = suspect;
+      currentQuestionIndex = 0;
+      document.getElementById('modal-result').textContent = '';
+      loadModalQuestion();
+      document.getElementById('question-modal').classList.remove('hidden');
+    }
 
-    function loadModalQuestion() {
-      // Título con el número de pregunta para más claridad
-      document.getElementById('modal-title').textContent = `Ask ${currentSuspect.name}: Question ${currentQuestionIndex + 1}`;
-      const bank = document.getElementById('modal-word-bank');
-      bank.innerHTML = '';
-      document.getElementById('next-question-btn').classList.add('hidden');
+    function loadModalQuestion() {
+      document.getElementById('modal-title').textContent = `Ask ${currentSuspect.name}`;
+      const bank = document.getElementById('modal-word-bank');
+      bank.innerHTML = '';
+      document.getElementById('next-question-btn').classList.add('hidden');
 
-      // CORRECCIÓN CLAVE: Destruir la instancia anterior de Sortable
-      if (sortableInstance) {
-          sortableInstance.destroy();
-          sortableInstance = null;
-      }
-      
-      const selectedWords = allQuestions[currentQuestionIndex].split(' ');
-      shuffle(selectedWords);
-      
-      selectedWords.forEach(word => {
-        const li = document.createElement('li');
-        li.textContent = word;
-        // La clase `cursor-move` asegura que se vea como algo arrastrable.
-        li.className = 'px-3 py-2 bg-blue-100 rounded cursor-move'; 
-        bank.appendChild(li);
-      });
-      
-      // Crear y guardar la nueva instancia de Sortable
-      sortableInstance = Sortable.create(bank, { animation: 150 });
-    }
+      const selectedWords = allQuestions[currentQuestionIndex].split(' ');
+      shuffle(selectedWords);
+      selectedWords.forEach(word => {
+        const li = document.createElement('li');
+        li.textContent = word;
+        li.className = 'px-3 py-2 bg-blue-100 rounded cursor-move';
+        bank.appendChild(li);
+      });
+      Sortable.create(bank, { animation: 150 });
+    }
 
-    function checkModalQuestion() {
-      const words = [...document.getElementById('modal-word-bank').children].map(li => li.textContent);
-      const userQuestion = words.join(' ');
-      const expected = allQuestions[currentQuestionIndex];
-      const result = document.getElementById('modal-result');
-      if (userQuestion === expected) {
-        const answer = currentSuspect.responses[`q${currentQuestionIndex + 1}`];
-        result.textContent = `✅ Correct! ${currentSuspect.name} said: \"${answer}\"`;
-        document.getElementById('next-question-btn').classList.remove('hidden');
-      } else {
-        result.textContent = '❌ Try again.';
-      }
-    }
+    function checkModalQuestion() {
+      const words = [...document.getElementById('modal-word-bank').children].map(li => li.textContent);
+      const userQuestion = words.join('?').trim(); // Añade el '?' al final para la comparación
 
-    function nextModalQuestion() {
-      currentQuestionIndex++;
-      if (currentQuestionIndex >= allQuestions.length) {
-        closeModal();
-      } else {
-        document.getElementById('modal-result').textContent = '';
-        loadModalQuestion();
-      }
-    }
+      // Reconstruye la pregunta esperada añadiendo el '?'
+      const expected = allQuestions[currentQuestionIndex].trim(); 
+      const result = document.getElementById('modal-result');
 
-    function closeModal() {
-      document.getElementById('question-modal').classList.add('hidden');
-      // Destruir la instancia de Sortable al cerrar el modal también es una buena práctica
-      if (sortableInstance) {
-          sortableInstance.destroy();
-          sortableInstance = null;
-      }
-    }
+      // Compara la pregunta del usuario con la esperada, asegurándose de que ambas tengan el '?'
+      if (userQuestion === expected) { 
+        const answer = currentSuspect.responses[`q${currentQuestionIndex + 1}`];
+        result.textContent = `${currentSuspect.name} said: \"${answer}\"`;
+        document.getElementById('next-question-btn').classList.remove('hidden');
+      } else {
+        result.textContent = 'Try again. The correct question is: ' + expected; // Muestra la pregunta esperada si es incorrecta para ayudar.
+      }
+    }
 
-    function checkTimeline() {
-      const expected = [
-        'Clara was in the living room.',
-        'Clara went to the study room.',
-        'Clara killed Mr. Blackwell.',
-        'Clara went to her room.',
-        'Eva found the body.'
-      ];
 
-      const userAnswers = [
-        document.getElementById('time1').value.trim(),
-        document.getElementById('time2').value.trim(),
-        document.getElementById('time3').value.trim(),
-        document.getElementById('time4').value.trim(),
-        document.getElementById('time5').value.trim()
-      ];
+    function nextModalQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex >= allQuestions.length) {
+        closeModal();
+      } else {
+        document.getElementById('modal-result').textContent = '';
+        loadModalQuestion();
+      }
+    }
 
-      const result = document.getElementById('timeline-result');
-      const isCorrect = userAnswers.every((ans, i) => ans.toLowerCase() === expected[i].toLowerCase());
+    function closeModal() {
+      document.getElementById('question-modal').classList.add('hidden');
+    }
 
-      result.textContent = isCorrect ? '✅ Correct timeline!' : '❌ Try again.';
-    }
+    function checkTimeline() {
+      // Oraciones correctas actualizadas
+      const expected = [
+        'Clara was in the living room.', 
+        'Clara went to the study room.', 
+        'Clara turned off the lights and killed Mr. Blackwell.', 
+        'Eva found the body.'
+      ];
 
-    function checkKillerGuess() {
-      const guess = document.getElementById('killer-guess').value;
-      const result = document.getElementById('killer-result');
-      result.textContent = guess === 'Clara' ? `✅ Correct! ${guess} is the killer.` : `❌ No, ${guess} is not the killer.`;
-    }
+      // Solo 4 entradas de tiempo (7:40, 7:45, 7:47, 7:50)
+      const userAnswers = [
+        document.getElementById('time1').value.trim(),
+        document.getElementById('time2').value.trim(),
+        document.getElementById('time3').value.trim(),
+        document.getElementById('time4').value.trim()
+      ];
 
-    function shuffle(arr) {
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-    }
-  </script>
+      const result = document.getElementById('timeline-result');
+      // Comprueba que la longitud de las respuestas sea la misma y que todas sean correctas
+      const isCorrect = userAnswers.length === expected.length && userAnswers.every((ans, i) => ans.toLowerCase() === expected[i].toLowerCase());
+
+      result.textContent = isCorrect ? '✅ Correct timeline!' : '❌ Try again.';
+    }
+
+    function checkKillerGuess() {
+      const guess = document.getElementById('killer-guess').value;
+      const result = document.getElementById('killer-result');
+      result.textContent = guess === 'Clara' ? `✅ Correct! ${guess} is the killer.` : `❌ No, ${guess} is not the killer.`;
+    }
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+    }
+  </script>
 </body>
 </html>
-
-
-
-
