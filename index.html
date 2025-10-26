@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mystery Game - Past Simple</title>
+  <title>Murder Mystery Game</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
@@ -137,7 +137,7 @@
         job: 'Musician',
         responses: {
           q1: 'At 7:40, I was playing the guitar in the music room.',
-          q2: 'At 7:45, I saw Bob outside in the garden.',
+          q2: 'At 7:45, I saw Bob alone in the garden.',
           q3: 'At 7:47, the lights went off.',
           q4: 'At 7:50, I stayed in the music room.'
         }
@@ -246,8 +246,8 @@
 
     function checkTimeline() {
       const expected = [
-        'Clara turned off the lights.',
-        'Clara went into the study.',
+        'Clara was in the living room.',
+        'Clara went to the study room.',
         'Clara killed Mr. Blackwell.',
         'Clara went to her room.',
         'Eva found the body.'
@@ -257,7 +257,8 @@
         document.getElementById('time1').value.trim(),
         document.getElementById('time2').value.trim(),
         document.getElementById('time3').value.trim(),
-        document.getElementById('time4').value.trim()
+        document.getElementById('time4').value.trim(),
+        document.getElementById('time5').value.trim()
       ];
 
       const result = document.getElementById('timeline-result');
@@ -281,5 +282,6 @@
   </script>
 </body>
 </html>
+
 
 
