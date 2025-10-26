@@ -27,7 +27,7 @@
     <section class="mb-8 bg-white p-6 rounded shadow">
       <h2 class="text-2xl font-semibold mb-2">The Story</h2>
       <p class="text-gray-700">
-        Last night at 8:00 PM, Mr. Blackwell was dead in the study. The lights went off at 7:45 PM and someone screamed. Seven people were in the house. Ask questions, find clues, and guess who killed Mr. Blackwell.
+        Last night at 8:00 PM, Mr. Blackwell was found dead in the study room of the small hotel. The lights went off at 7:47 PM and someone screamed. Seven people were in the hotel. Ask questions, find clues, and guess who killed Mr. Blackwell.
       </p>
     </section>
 
@@ -63,7 +63,7 @@
     </section>
 
     <section>
-      <h2 class="text-2xl font-semibold mb-4">Who Did It?</h2>
+      <h2 class="text-2xl font-semibold mb-4">Who is the killer?</h2>
       <p class="text-gray-600 mb-2">Choose the killer:</p>
       <select id="killer-guess" class="w-full max-w-xs p-2 border border-gray-300 rounded">
         <option value="">-- Choose --</option>
@@ -86,8 +86,8 @@
         name: 'Alice',
         job: 'Cook',
         responses: {
-          q1: 'At 7:40, I was in the kitchen. I cooked dinner.',
-          q2: 'At 7:45, I saw Clara walk fast to the study.',
+          q1: 'At 7:40, I was cooking dinner in the kitchen.',
+          q2: 'At 7:45, I saw someone walking fast to the study room.',
           q3: 'At 7:47, the lights went off. I heard a scream.',
           q4: 'At 7:50, I stayed in the kitchen.'
         }
@@ -97,9 +97,9 @@
         job: 'Gardener',
         responses: {
           q1: 'At 7:40, I was in the garden.',
-          q2: 'At 7:45, I heard a noise inside.',
-          q3: 'At 7:47, I saw the lights go off.',
-          q4: 'At 7:50, I went to the door.'
+          q2: 'At 7:45, I didn't see anyone, but I heard a loud noise.',
+          q3: 'At 7:47, I saw the lights go off, and someone screamed.',
+          q4: 'At 7:50, I went inside the house.'
         }
       },
       {
@@ -107,7 +107,7 @@
         job: 'Teacher',
         responses: {
           q1: 'At 7:40, I was in the living room.',
-          q2: 'At 7:45, I went to the study to talk to Mr. Blackwell.',
+          q2: 'At 7:45, I went outside to talk to Bob.',
           q3: 'At 7:47, the lights went off. I was scared.',
           q4: 'At 7:50, I went to my room.'
         }
@@ -116,9 +116,9 @@
         name: 'David',
         job: 'Driver',
         responses: {
-          q1: 'At 7:40, I was cleaning the car.',
-          q2: 'At 7:45, I saw Clara near the study.',
-          q3: 'At 7:47, I heard a scream.',
+          q1: 'At 7:40, I was cleaning the car in the garage.',
+          q2: 'At 7:45, I didn't see anyone, but I heard a loudb noise inside.',
+          q3: 'At 7:47, the lighs went off.',
           q4: 'At 7:50, I stayed outside.'
         }
       },
@@ -126,18 +126,18 @@
         name: 'Eva',
         job: 'Doctor',
         responses: {
-          q1: 'At 7:40, I was reading a book.',
-          q2: 'At 7:45, I saw Alice in the kitchen.',
-          q3: 'At 7:47, I heard a noise.',
-          q4: 'At 7:50, I went to the hall.'
+          q1: 'At 7:40, I was reading a book in the hall.',
+          q2: 'At 7:45, I saw Alice cooking in the kitchen.',
+          q3: 'At 7:47, the lights went off, and I heard a scream in the study room.',
+          q4: 'At 7:50, I went to the study room to check.'
         }
       },
       {
         name: 'Frank',
         job: 'Musician',
         responses: {
-          q1: 'At 7:40, I was playing the guitar.',
-          q2: 'At 7:45, I saw Bob outside.',
+          q1: 'At 7:40, I was playing the guitar in the music room.',
+          q2: 'At 7:45, I saw Bob outside in the garden.',
           q3: 'At 7:47, the lights went off.',
           q4: 'At 7:50, I stayed in the music room.'
         }
@@ -147,8 +147,8 @@
         job: 'Librarian',
         responses: {
           q1: 'At 7:40, I was in the library.',
-          q2: 'At 7:45, I heard someone walking fast.',
-          q3: 'At 7:47, I heard a scream.',
+          q2: 'At 7:45, I saw Clara near the study room.',
+          q3: 'At 7:47, I heard a scream after the lights went off.',
           q4: 'At 7:50, I stayed in the library.'
         }
       }
@@ -282,3 +282,4 @@
   </script>
 </body>
 </html>
+
