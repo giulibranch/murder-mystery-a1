@@ -172,7 +172,11 @@
       bank.innerHTML = '';
       document.getElementById('next-question-btn').classList.add('hidden');
 
-      const selectedWords = allQuestions[currentQuestionIndex].split(' ');
+      // CORRECCIÓN: Separamos el signo de interrogación para que sea un bloque individual
+      const questionWithoutPunctuation = allQuestions[currentQuestionIndex].slice(0, -1);
+      let selectedWords = questionWithoutPunctuation.split(' ');
+      selectedWords.push('?'); // Agregamos el signo de interrogación como una palabra/bloque más
+
       shuffle(selectedWords);
       selectedWords.forEach(word => {
         const li = document.createElement('li');
@@ -185,19 +189,20 @@
 
     function checkModalQuestion() {
       const words = [...document.getElementById('modal-word-bank').children].map(li => li.textContent);
-      const userQuestion = words.join('?').trim(); // Añade el '?' al final para la comparación
+      
+      // CORRECCIÓN: Unimos las palabras y luego reemplazamos " ?" por "?" para corregir el formato.
+      let userQuestion = words.join(' ');
+      userQuestion = userQuestion.replace(' ?', '?').trim(); 
 
-      // Reconstruye la pregunta esperada añadiendo el '?'
-      const expected = allQuestions[currentQuestionIndex].trim(); 
+      const expected = allQuestions[currentQuestionIndex].trim();
       const result = document.getElementById('modal-result');
 
-      // Compara la pregunta del usuario con la esperada, asegurándose de que ambas tengan el '?'
       if (userQuestion === expected) { 
         const answer = currentSuspect.responses[`q${currentQuestionIndex + 1}`];
         result.textContent = `${currentSuspect.name} said: \"${answer}\"`;
         document.getElementById('next-question-btn').classList.remove('hidden');
       } else {
-        result.textContent = 'Try again. The correct question is: ' + expected; // Muestra la pregunta esperada si es incorrecta para ayudar.
+        result.textContent = '❌ Try again.';
       }
     }
 
